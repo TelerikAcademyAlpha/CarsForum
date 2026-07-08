@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -36,8 +37,11 @@ public class User {
     private String username;
 
     @NotBlank
-    @Column(name = "password", unique = true, nullable = false)
+    @Column(nullable = false)
     private String password;
+
+    @Column(length = 20)
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -49,6 +53,9 @@ public class User {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
     public User () {
 
@@ -134,5 +141,26 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

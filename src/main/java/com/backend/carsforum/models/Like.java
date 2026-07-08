@@ -2,8 +2,15 @@ package com.backend.carsforum.models;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
-@Table(name = "likes")
+@Table(
+        name = "likes",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "post_id"})
+        }
+)
 public class Like {
 
     @Id
@@ -42,5 +49,18 @@ public class Like {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Like like = (Like) o;
+        return Objects.equals(id, like.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
