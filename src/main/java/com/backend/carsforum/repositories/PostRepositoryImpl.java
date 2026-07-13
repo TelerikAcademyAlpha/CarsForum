@@ -75,8 +75,6 @@ public class PostRepositoryImpl implements PostRepository{
     @Override
     public List<Post> findTopCommented(int limit) {
         if (limit <= 0) limit = 10;
-        // Използваме LEFT JOIN към comments и групираме по пост, сортираме по брой коментари
-        // Важно: за да работи, Post трябва да има mapped collection "comments"
         String hql = "SELECT p FROM Post p LEFT JOIN p.comments c GROUP BY p.id ORDER BY COUNT(c) DESC";
         return session().createQuery(hql, Post.class)
                 .setMaxResults(limit)
