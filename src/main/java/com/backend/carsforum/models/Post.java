@@ -49,10 +49,6 @@ public class Post {
     )
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="car_id")
-    private Car car;
-
     public Post () {}
 
     public Post(String title, String content, LocalDateTime createdAt, User author) {
@@ -124,14 +120,6 @@ public class Post {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
     }
 
     @PrePersist
