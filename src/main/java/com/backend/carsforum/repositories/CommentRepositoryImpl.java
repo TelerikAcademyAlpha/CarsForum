@@ -19,6 +19,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
 
+    private Session session(){
+        return sessionFactory.getCurrentSession();
+    }
     @Override
     public Comment save(Comment comment) {
         Session session = sessionFactory.getCurrentSession();
@@ -83,6 +86,26 @@ public class CommentRepositoryImpl implements CommentRepository {
                         "FROM Comment c WHERE c.parentComment.id = :parentCommentId",
                         Comment.class)
                 .setParameter("id", parentCommentId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Comment> findByPostId(Long postId) {
+        String hql = "FROM Comment c WHERE c.post.id = :postId";
+
+        return session()
+                .createQuery(hql, Comment.class)
+                .setParameter("postId", postId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Comment> findByAuthorId(Long authorId) {
+        String hql = "FROM Comment c WHERE c.author.id = :authorId";
+
+        return session()
+                .createQuery(hql, Comment.class)
+                .setParameter("authorId", authorId)
                 .getResultList();
     }
 }

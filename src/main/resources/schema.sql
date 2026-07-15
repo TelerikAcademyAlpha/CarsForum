@@ -81,3 +81,5 @@ create table post_tags
         foreign key (tag_id) references tags (id)
 );
 
+
+

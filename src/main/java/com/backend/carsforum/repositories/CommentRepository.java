@@ -24,4 +24,8 @@ public interface CommentRepository {
     List<Comment> findByAuthor(User author);
 
     List<Comment> findReplies(Long parentComment);
+
+    List<Comment> findByAuthorId(Long authorId);
+
+    public List<Comment> findByPostId(Long postId);
 }
