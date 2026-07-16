@@ -25,7 +25,6 @@ public class UserRepositoryImpl  implements UserRepository{
     }
 
     @Override
-    @Transactional
     public User findByUsername(String username) {
         if (username == null) return null;
         String hql = "FROM User u WHERE lower(u.username) = :uName";
@@ -37,7 +36,6 @@ public class UserRepositoryImpl  implements UserRepository{
     }
 
     @Override
-    @Transactional
     public User findByEmail(String email) {
         if (email == null) return null;
         String hql = "FROM User u WHERE lower(u.email) = :eMail";
@@ -49,25 +47,21 @@ public class UserRepositoryImpl  implements UserRepository{
     }
 
     @Override
-    @Transactional
     public void save(User user) {
         session().persist(user);
     }
 
     @Override
-    @Transactional
     public void update(User user) {
         session().merge(user);
     }
 
     @Override
-    @Transactional
     public void delete(User user) {
         session().remove(user);
     }
 
     @Override
-    @Transactional
     public boolean existsByUsername(String username) {
         if (username == null) return false;
         String hql = "SELECT count(u) FROM User u WHERE lower(u.username) = :uName";
@@ -78,7 +72,6 @@ public class UserRepositoryImpl  implements UserRepository{
     }
 
     @Override
-    @Transactional
     public boolean existsByEmail(String email) {
         if (email == null) return false;
         String hql = "SELECT count(u) FROM User u WHERE lower(u.email) = :eMail";
@@ -89,7 +82,6 @@ public class UserRepositoryImpl  implements UserRepository{
     }
 
     @Override
-    @Transactional
     public long countAll() {
         Long count = session().createQuery("SELECT COUNT(u) FROM User u", Long.class).uniqueResult();
         return count == null ? 0 : count;

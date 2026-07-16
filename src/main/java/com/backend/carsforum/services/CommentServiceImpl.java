@@ -48,7 +48,6 @@ public class CommentServiceImpl implements CommentService{
         if (comment == null || comment.getContent() == null || comment.getContent().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment content must not be empty.");
         }
-        // basic length validation (adjust if needed)
         if (comment.getContent().length() < 2) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment too short.");
         }
@@ -84,7 +83,7 @@ public class CommentServiceImpl implements CommentService{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this comment.");
         }
 
-        // Validate new content
+
         if (commentToUpdate.getContent() == null || commentToUpdate.getContent().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment content must not be empty.");
         }
