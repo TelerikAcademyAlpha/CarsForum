@@ -60,4 +60,10 @@ public class TagRepositoryImpl implements TagRepository {
                         "FROM Tag", Tag.class)
                 .getResultList();
     }
+
+    @Override
+    public void delete(Tag tag){
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(tag);
+    }
 }
