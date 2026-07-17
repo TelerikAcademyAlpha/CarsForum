@@ -5,7 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -34,7 +38,7 @@ public class Post {
 
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -51,11 +55,10 @@ public class Post {
 
     public Post () {}
 
-    public Post(String title, String content, LocalDateTime createdAt, User author) {
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.author = author;
+    public Post(String title, String content, User author) {
+        setTitle(title);
+        setContent(content);
+        setAuthor(author);
     }
 
     public String getTitle() {
@@ -63,7 +66,7 @@ public class Post {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title == null ? null : title.trim();
     }
 
     public Long getId() {
@@ -79,7 +82,7 @@ public class Post {
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.content = content == null ? null : content.trim();
     }
 
     public LocalDateTime getCreatedAt() {
@@ -102,10 +105,6 @@ public class Post {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public List<Like> getLikes() {
         return likes;
     }
@@ -122,8 +121,38 @@ public class Post {
         this.tags = tags;
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setPost(null);
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.getPosts().add(this);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+        tag.getPosts().remove(this);
+    }
+
+    public void addLike(Like like) {
+        likes.add(like);
+        like.setPost(this);
+    }
+
+    public void removeLike(Like like) {
+        likes.remove(like);
+        like.setPost(null);
+    }
+
     @PrePersist
-    public void onCreate() {
+    public void initializeCreationDate() {
         createdAt = LocalDateTime.now();
     }
 

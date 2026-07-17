@@ -1,6 +1,8 @@
 package com.backend.carsforum.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,16 +17,18 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(min = 2, max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<>();
 
     public Tag() {}
 
     public Tag(String name) {
-        this.name = name.toLowerCase();
+        setName(name);
     }
 
     public Long getId() {
@@ -40,7 +44,9 @@ public class Tag {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null
+                ? null
+                : name.trim().toLowerCase();
     }
 
     public Set<Post> getPosts() {
@@ -49,6 +55,13 @@ public class Tag {
 
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
+    }
+
+
+    @PrePersist
+    @PreUpdate
+    private void normalizeName() {
+        setName(name);
     }
 
     @Override
