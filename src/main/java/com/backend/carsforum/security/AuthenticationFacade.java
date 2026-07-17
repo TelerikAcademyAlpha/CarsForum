@@ -1,5 +1,6 @@
 package com.backend.carsforum.security;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class AuthenticationFacade {
         Authentication authentication = getAuthentication();
 
         return authentication != null
-                && authentication.isAuthenticated();
+                && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken);
     }
 }
