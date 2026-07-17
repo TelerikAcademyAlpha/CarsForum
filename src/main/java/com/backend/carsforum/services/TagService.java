@@ -15,5 +15,5 @@ public interface TagService {
 
     void delete(Long id);
 
-    List<Tag> listAll();
+    List<Tag> findAll();
 }
