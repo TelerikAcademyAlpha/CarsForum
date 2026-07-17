@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
 
@@ -46,7 +46,6 @@ public class TagServiceImpl implements TagService{
         Optional<Tag> opt = tagRepository.findByName(normalized);
         return opt.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag '" + normalized + "' not found."));
     }
-
 
     @Override
     @Transactional
@@ -103,7 +102,7 @@ public class TagServiceImpl implements TagService{
 
     @Override
     @Transactional
-    public List<Tag> listAll() {
+    public List<Tag> findAll() {
         return tagRepository.findAll();
     }
 }
