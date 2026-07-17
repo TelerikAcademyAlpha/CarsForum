@@ -14,5 +14,6 @@ public interface PostRepository {
     List<Post> findLatest(int limit);
     List<Post> findTopCommented(int limit);
     long countAll();
+    public List<Post> findAll();
 
 }

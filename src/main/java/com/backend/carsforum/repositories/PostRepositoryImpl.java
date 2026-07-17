@@ -86,5 +86,12 @@ public class PostRepositoryImpl implements PostRepository{
         Long count = session().createQuery("SELECT count(p) FROM Post p", Long.class).uniqueResult();
         return count == null ? 0L : count;
     }
+
+    @Override
+    public List<Post> findAll() {
+        return session()
+                .createQuery("FROM Post", Post.class)
+                .getResultList();
+    }
 }
 
