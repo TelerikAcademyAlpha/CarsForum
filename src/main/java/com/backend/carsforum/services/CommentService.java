@@ -6,15 +6,17 @@ import java.util.List;
 
 public interface CommentService {
 
+    Comment create(Comment comment);
+
+    Comment update(Comment comment);
+
+    void delete(Long commentId);
+
     Comment getById(Long id);
 
-    Comment create(Long authorId, Long postId, Comment comment);
+    List<Comment> getByPost(Long postId);
 
-    Comment update(Comment commentToUpdate, Long currentUserId, boolean isAdmin);
+    List<Comment> getByAuthor(Long authorId);
 
-    void delete(Long id, Long currentUserId, boolean isAdmin);
-
-    List<Comment> getByPostId(Long postId);
-
-    List<Comment> getByAuthorId(Long authorId);
+    Comment reply(Long parentCommentId, Comment reply);
 }

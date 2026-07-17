@@ -4,122 +4,147 @@ import com.backend.carsforum.models.Comment;
 import com.backend.carsforum.models.Post;
 import com.backend.carsforum.models.User;
 import com.backend.carsforum.repositories.CommentRepository;
-import com.backend.carsforum.repositories.CommentRepositoryImpl;
 import com.backend.carsforum.repositories.PostRepository;
-import com.backend.carsforum.repositories.UserRepository;
+import com.backend.carsforum.security.AuthenticationFacade;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService{
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final AuthenticationFacade authenticationFacade;
+    private final UserService userService;
 
-    @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository)
-    {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, AuthenticationFacade authenticationFacade, UserService userService) {
         this.commentRepository = commentRepository;
-        this. postRepository = postRepository;
-        this.userRepository= userRepository;
-    }
-
-    @Override
-    public Comment getById(Long id) {
-        Optional<Comment> comment = commentRepository.findById(id);
-        if (comment == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment with ID " + id + " not found.");
-        }
-        return comment.get();
+        this.postRepository = postRepository;
+        this.authenticationFacade = authenticationFacade;
+        this.userService = userService;
     }
 
     @Override
     @Transactional
-    public Comment create(Long authorId, Long postId, Comment comment) {
-        if (comment == null || comment.getContent() == null || comment.getContent().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment content must not be empty.");
-        }
-        if (comment.getContent().length() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment too short.");
+    public Comment create(Comment comment) {
+        User currentUser = getCurrentUser();
+
+        if (currentUser.isBlocked()) {
+            throw new IllegalArgumentException("Blocked users cannot comment.");
         }
 
-        User author = userRepository.findById(authorId);
-        if (author == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found.");
-        }
+        Post post = getExistingPost(comment.getPost().getId());
 
-        Post post = postRepository.findById(postId);
-        if (post == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found.");
-        }
-
-        comment.setAuthor(author);
+        comment.setAuthor(currentUser);
         comment.setPost(post);
-        comment.setCreatedAt(LocalDateTime.now());
+
         commentRepository.save(comment);
+
         return comment;
     }
 
     @Override
     @Transactional
-    public Comment update(Comment commentToUpdate, Long currentUserId, boolean isAdmin) {
-        if (commentToUpdate == null || commentToUpdate.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment id is required for update.");
+    public Comment update(Comment comment) {
+
+        User currentUser = getCurrentUser();
+
+        Comment existing = getExistingComment(comment.getId());
+
+        if (!existing.getAuthor().getId().equals(currentUser.getId())) {
+            throw new IllegalArgumentException(
+                    "You cannot edit another user's comment.");
         }
-        Comment existing = getById(commentToUpdate.getId());
-
-
-        Long authorId = existing.getAuthor() != null ? existing.getAuthor().getId() : null;
-        if (!isAdmin && (authorId == null || !authorId.equals(currentUserId))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this comment.");
-        }
-
-
-        if (commentToUpdate.getContent() == null || commentToUpdate.getContent().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment content must not be empty.");
-        }
-        if (commentToUpdate.getContent().length() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment too short.");
-        }
-
-        existing.setContent(commentToUpdate.getContent());
-
+        existing.setContent(comment.getContent());
 
         commentRepository.update(existing);
+
         return existing;
     }
 
     @Override
     @Transactional
-    public void delete(Long id, Long currentUserId, boolean isAdmin) {
-        Comment existing = getById(id);
+    public void delete(Long commentId) {
 
-        Long authorId = existing.getAuthor() != null ? existing.getAuthor().getId() : null;
-        if (!isAdmin && (authorId == null || !authorId.equals(currentUserId))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to delete this comment.");
+        User currentUser = getCurrentUser();
+
+        Comment comment = getExistingComment(commentId);
+
+        if (!comment.getAuthor().getId().equals(currentUser.getId())) {
+            throw new IllegalArgumentException(
+                    "You cannot delete another user's comment.");
         }
 
-        commentRepository.delete(existing);
+        commentRepository.delete(comment);
     }
 
     @Override
-    public List<Comment> getByPostId(Long postId) {
-        if (postId == null) return List.of();
-        return commentRepository.findByPostId(postId);
+    public Comment getById(Long id) {
+        return getExistingComment(id);
     }
 
     @Override
-    public List<Comment> getByAuthorId(Long authorId) {
-        if (authorId == null) return List.of();
-        return commentRepository.findByAuthorId(authorId);
+    public List<Comment> getByPost(Long postId) {
+
+        Post post = getExistingPost(postId);
+
+        return commentRepository.findByPost(post);
+    }
+
+    @Override
+    public List<Comment> getByAuthor(Long authorId) {
+        User author = userService.getById(authorId);
+
+        return commentRepository.findByAuthor(author);
+    }
+
+    @Override
+    @Transactional
+    public Comment reply(Long parentCommentId, Comment reply) {
+
+        User currentUser = getCurrentUser();
+
+        if (currentUser.isBlocked()) {
+            throw new IllegalArgumentException("Blocked users cannot reply.");
+        }
+
+        Comment parent = getExistingComment(parentCommentId);
+
+        reply.setAuthor(currentUser);
+        reply.setPost(parent.getPost());
+
+        parent.addReply(reply);
+
+        commentRepository.save(reply);
+
+        return reply;
+    }
+
+    private Comment getExistingComment(Long id) {
+
+        return commentRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Comment not found."));
+    }
+
+    private Post getExistingPost(Long id) {
+
+        Post post = postRepository.findById(id);
+
+        if (post == null) {
+            throw new IllegalArgumentException("Post not found.");
+        }
+
+        return post;
+    }
+
+    private User getCurrentUser() {
+
+        String username = authenticationFacade.getCurrentUsername();
+
+        return userService.getByUsername(username);
     }
 }
