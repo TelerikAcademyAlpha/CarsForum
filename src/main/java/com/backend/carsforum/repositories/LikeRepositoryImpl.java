@@ -41,7 +41,7 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public Optional<Like> findByUserAndPost(User user, Post post) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Like l WHERE lower(l.user) = :user and lower(l.post) = :post";
+        String hql = "FROM Like l WHERE l.user = :user AND l.post = :post";
         Like like = session.createQuery(hql, Like.class)
                 .setParameter("user", user)
                 .setParameter("post", post)

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
 
@@ -51,6 +51,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
+    @Transactional
     public List<Tag> findAll() {
         return tagRepository.findAll();
     }

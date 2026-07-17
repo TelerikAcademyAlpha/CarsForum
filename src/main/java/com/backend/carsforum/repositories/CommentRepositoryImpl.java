@@ -85,7 +85,7 @@ public class CommentRepositoryImpl implements CommentRepository {
                 .createQuery(
                         "FROM Comment c WHERE c.parentComment.id = :parentCommentId",
                         Comment.class)
-                .setParameter("id", parentCommentId)
+                .setParameter("parentCommentId", parentCommentId)
                 .getResultList();
     }
 
