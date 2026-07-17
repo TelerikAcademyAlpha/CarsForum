@@ -2,11 +2,11 @@ package com.backend.carsforum.services;
 
 public interface LikeService {
 
-    void likePost(Long postId, Long userId);
+    void like(Long postId);
 
-    void unlikePost(Long postId, Long userId);
+    void unlike(Long postId);
 
-    boolean hasUserLiked(Long postId, Long userId);
+    boolean isLiked(Long postId);
 
     long countLikes(Long postId);
 }

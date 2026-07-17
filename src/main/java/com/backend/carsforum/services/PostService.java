@@ -4,12 +4,27 @@ import com.backend.carsforum.models.Post;
 import java.util.List;
 
 public interface PostService {
-    Post getById(Long id);
-    void create(Post post);
-    void update(Post post);
+    Post create(Post post);
+
+    Post update(Post post);
+
     void delete(Long id);
-    List<Post> getByAuthorId(Long authorId);
-    List<Post> searchByKeyword(String keyword);
-    List<Post> getLatest(int limit);
-    List<Post> getTopCommented(int limit);
+
+    Post getById(Long id);
+
+    List<Post> getByAuthor(Long authorId);
+
+    List<Post> search(String keyword);
+
+    List<Post> getLatest();
+
+    List<Post> getTopCommented();
+
+//    List<Post> filter(PostFilterOptions filterOptions); // later
+
+    void addTag(Long postId, String tagName);
+
+    void removeTag(Long postId, String tagName);
+
+    List<Post> findAll();
 }
