@@ -1,5 +1,8 @@
 package com.backend.carsforum.services;
 
+import com.backend.carsforum.exceptions.BlockedUserException;
+import com.backend.carsforum.exceptions.EntityNotFoundException;
+import com.backend.carsforum.exceptions.InvalidOperationException;
 import com.backend.carsforum.models.Comment;
 import com.backend.carsforum.models.Post;
 import com.backend.carsforum.models.User;
@@ -33,7 +36,7 @@ public class CommentServiceImpl implements CommentService{
         User currentUser = getCurrentUser();
 
         if (currentUser.isBlocked()) {
-            throw new IllegalArgumentException("Blocked users cannot comment.");
+            throw new BlockedUserException("Blocked users cannot comment.");
         }
 
         Post post = getExistingPost(comment.getPost().getId());
@@ -55,8 +58,7 @@ public class CommentServiceImpl implements CommentService{
         Comment existing = getExistingComment(comment.getId());
 
         if (!existing.getAuthor().getId().equals(currentUser.getId())) {
-            throw new IllegalArgumentException(
-                    "You cannot edit another user's comment.");
+            throw new InvalidOperationException("You cannot edit another user's comment.");
         }
         existing.setContent(comment.getContent());
 
@@ -74,8 +76,7 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = getExistingComment(commentId);
 
         if (!comment.getAuthor().getId().equals(currentUser.getId())) {
-            throw new IllegalArgumentException(
-                    "You cannot delete another user's comment.");
+            throw new InvalidOperationException("You cannot delete another user's comment.");
         }
 
         commentRepository.delete(comment);
@@ -108,7 +109,7 @@ public class CommentServiceImpl implements CommentService{
         User currentUser = getCurrentUser();
 
         if (currentUser.isBlocked()) {
-            throw new IllegalArgumentException("Blocked users cannot reply.");
+            throw new BlockedUserException("Blocked users cannot reply.");
         }
 
         Comment parent = getExistingComment(parentCommentId);
@@ -127,7 +128,7 @@ public class CommentServiceImpl implements CommentService{
 
         return commentRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Comment not found."));
+                        new EntityNotFoundException("Comment",id));
     }
 
     private Post getExistingPost(Long id) {
@@ -135,7 +136,7 @@ public class CommentServiceImpl implements CommentService{
         Post post = postRepository.findById(id);
 
         if (post == null) {
-            throw new IllegalArgumentException("Post not found.");
+            throw new EntityNotFoundException("Post",id);
         }
 
         return post;

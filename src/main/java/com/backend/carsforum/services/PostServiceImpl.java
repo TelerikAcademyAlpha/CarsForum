@@ -1,15 +1,15 @@
 package com.backend.carsforum.services;
 
+import com.backend.carsforum.exceptions.BlockedUserException;
+import com.backend.carsforum.exceptions.EntityNotFoundException;
+import com.backend.carsforum.exceptions.InvalidOperationException;
 import com.backend.carsforum.models.Post;
 import com.backend.carsforum.models.Tag;
 import com.backend.carsforum.models.User;
 import com.backend.carsforum.repositories.PostRepository;
 import com.backend.carsforum.security.AuthenticationFacade;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
         User author = getCurrentUser();
 
         if (author.isBlocked()){
-            throw new IllegalArgumentException("Blocked users cannot create posts.");
+            throw new BlockedUserException("Blocked users cannot create posts.");
         }
 
         post.setAuthor(author);
@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
         User currentUser = userService.getByUsername(username);
 
         if (!existing.getAuthor().getId().equals(currentUser.getId())) {
-            throw new IllegalArgumentException("You cannot edit another user's post.");
+            throw new InvalidOperationException("You cannot edit another user's post.");
         }
 
         existing.setTitle(post.getTitle());
@@ -76,7 +76,7 @@ public class PostServiceImpl implements PostService {
         User currentUser = userService.getByUsername(username);
 
         if (!post.getAuthor().getId().equals(currentUser.getId())) {
-            throw new IllegalArgumentException("You cannot delete another user's post.");
+            throw new InvalidOperationException("You cannot delete another user's post.");
         }
 
         postRepository.delete(post);
@@ -142,7 +142,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id);
 
         if (post == null) {
-            throw new IllegalArgumentException("Post not found.");
+            throw new EntityNotFoundException("Post",id);
         }
 
         return post;
