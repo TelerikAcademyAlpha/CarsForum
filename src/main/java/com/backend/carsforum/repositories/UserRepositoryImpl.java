@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserRepositoryImpl  implements UserRepository{
 
@@ -86,5 +88,14 @@ public class UserRepositoryImpl  implements UserRepository{
         Long count = session().createQuery("SELECT COUNT(u) FROM User u", Long.class).uniqueResult();
         return count == null ? 0 : count;
     }
+
+    @Override
+    @Transactional
+    public List<User> findAll() {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM User";
+        return session.createQuery(hql,User.class).getResultList();
+    }
+
 
 }
