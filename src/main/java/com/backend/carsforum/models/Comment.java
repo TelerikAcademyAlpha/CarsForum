@@ -107,6 +107,16 @@ public class Comment {
         this.replies = replies;
     }
 
+    public void addReply(Comment reply) {
+        replies.add(reply);
+        reply.setParentComment(this);
+    }
+
+    public void removeReply(Comment reply) {
+        replies.remove(reply);
+        reply.setParentComment(null);
+    }
+
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();

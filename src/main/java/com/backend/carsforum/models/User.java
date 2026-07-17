@@ -43,6 +43,9 @@ public class User {
     @Column(length = 20)
     private String phoneNumber;
 
+    @Column(nullable = false)
+    private boolean blocked = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
@@ -151,6 +154,14 @@ public class User {
         this.likes = likes;
     }
 
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
 
     @Override
     public boolean equals(Object o) {
