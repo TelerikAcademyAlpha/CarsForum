@@ -1,6 +1,7 @@
 package com.backend.carsforum.services;
 
 import com.backend.carsforum.models.User;
+import com.backend.carsforum.models.dtos.request.UpdateUserRequest;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface UserService {
 
     User update(User user);
 
-    void delete(User user);
+    void delete(Long id);
 
     void block(Long id);
 
@@ -26,4 +27,6 @@ public interface UserService {
     void promoteToAdmin(Long id);
 
     long getUsersCount();
+
+    User updateProfile(UpdateUserRequest request);
 }

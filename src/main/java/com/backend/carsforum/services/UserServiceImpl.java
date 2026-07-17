@@ -1,38 +1,43 @@
 package com.backend.carsforum.services;
 
 import com.backend.carsforum.exceptions.EntityDuplicateException;
+import com.backend.carsforum.exceptions.EntityNotFoundException;
+import com.backend.carsforum.mapper.UserMapper;
 import com.backend.carsforum.models.Role;
 import com.backend.carsforum.models.User;
+import com.backend.carsforum.models.dtos.request.UpdateUserRequest;
 import com.backend.carsforum.repositories.UserRepository;
+import com.backend.carsforum.security.AuthenticationFacade;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationFacade authenticationFacade;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationFacade authenticationFacade, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationFacade = authenticationFacade;
+        this.userMapper = userMapper;
     }
 
     @Override
     @Transactional
     public User register(User user) {
-        if (userRepository.existsByUsername(user.getUsername())){
-            throw new EntityDuplicateException("User","username",user.getUsername());
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new EntityDuplicateException("User", "username", user.getUsername());
         }
 
-        if (userRepository.existsByEmail(user.getEmail())){
-            throw new EntityDuplicateException("User","email",user.getEmail());
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new EntityDuplicateException("User", "email", user.getEmail());
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -43,17 +48,43 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getById(Long id) {
-        return  userRepository.findById(id);
+        return getExistingUser(id);
     }
 
     @Override
     public User getByUsername(String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new EntityNotFoundException("User", "username", username);
+        }
+        return user;
     }
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new EntityNotFoundException("User", "email", email);
+        }
+
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public User updateProfile(UpdateUserRequest request) {
+
+        User current = getCurrentUser();
+
+        // duplicate email check
+
+        userMapper.updateEntity(request, current);
+
+        userRepository.update(current);
+
+        return current;
     }
 
     @Override
@@ -63,7 +94,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void delete(User user) {
+    public void delete(Long id) {
+        User user = getExistingUser(id);
+
         userRepository.delete(user);
     }
 
@@ -100,7 +133,7 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(id);
 
         if (user == null) {
-            throw new IllegalArgumentException("User not found.");
+            throw new EntityNotFoundException("User", id);
         }
 
         return user;
@@ -111,6 +144,16 @@ public class UserServiceImpl implements UserService{
     public User update(User updatedUser) {
         User existing = getExistingUser(updatedUser.getId());
 
+        // Only check if the email is actually changing
+        if (!existing.getEmail().equals(updatedUser.getEmail())
+                && userRepository.existsByEmail(updatedUser.getEmail())) {
+
+            throw new EntityDuplicateException(
+                    "User",
+                    "email",
+                    updatedUser.getEmail());
+        }
+
         existing.setFirstName(updatedUser.getFirstName());
         existing.setLastName(updatedUser.getLastName());
         existing.setEmail(updatedUser.getEmail());
@@ -120,5 +163,9 @@ public class UserServiceImpl implements UserService{
         return existing;
     }
 
+    public User getCurrentUser() {
+        String username = authenticationFacade.getCurrentUsername();
+        return getByUsername(username);
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.backend.carsforum.services;
 
+import com.backend.carsforum.exceptions.EntityDuplicateException;
+import com.backend.carsforum.exceptions.EntityNotFoundException;
 import com.backend.carsforum.models.Tag;
 import com.backend.carsforum.repositories.TagRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +23,7 @@ public class TagServiceImpl implements TagService {
     public Tag getByName(String name) {
         return tagRepository.findByName(name)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Tag not found."));
+         new EntityNotFoundException("Tag","name",name));
     }
 
     @Override
@@ -29,7 +31,7 @@ public class TagServiceImpl implements TagService {
     public Tag create(String name) {
 
         if (tagRepository.findByName(name).isPresent()) {
-            throw new IllegalArgumentException("Tag already exists.");
+            throw new EntityDuplicateException("Tag", "name", name);
         }
 
         Tag tag = new Tag();
