@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService{
+
     private final TagRepository tagRepository;
 
     public TagServiceImpl(TagRepository tagRepository) {
@@ -24,7 +25,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    @Transactional
+    @jakarta.transaction.Transactional
     public Tag create(String name) {
 
         if (tagRepository.findByName(name).isPresent()) {
@@ -50,7 +51,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public List<Tag> getAll() {
+    public List<Tag> findAll() {
         return tagRepository.findAll();
     }
 }

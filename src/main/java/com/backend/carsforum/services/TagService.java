@@ -11,5 +11,5 @@ public interface TagService {
 
     Tag getOrCreate(String name);
 
-    List<Tag> getAll();
+    List<Tag> findAll();
 }
