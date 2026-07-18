@@ -2,6 +2,7 @@ package com.backend.carsforum.mapper;
 
 import com.backend.carsforum.models.User;
 import com.backend.carsforum.models.dtos.request.RegisterRequest;
+import com.backend.carsforum.models.dtos.request.UpdateUserRequest;
 import com.backend.carsforum.models.dtos.response.UserResponse;
 import org.springframework.stereotype.Component;
 
@@ -34,5 +35,12 @@ public class UserMapper {
         response.setBlocked(user.isBlocked());
 
         return response;
+    }
+
+    public void updateEntity(UpdateUserRequest request, User user) {
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
     }
 }

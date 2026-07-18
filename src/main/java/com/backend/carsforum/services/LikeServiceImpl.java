@@ -1,20 +1,14 @@
 package com.backend.carsforum.services;
 
+import com.backend.carsforum.exceptions.EntityNotFoundException;
 import com.backend.carsforum.models.Like;
 import com.backend.carsforum.models.Post;
 import com.backend.carsforum.models.User;
 import com.backend.carsforum.repositories.LikeRepository;
 import com.backend.carsforum.repositories.PostRepository;
-import com.backend.carsforum.repositories.UserRepository;
-import com.backend.carsforum.repositories.UserRepositoryImpl;
 import com.backend.carsforum.security.AuthenticationFacade;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Service
 public class LikeServiceImpl implements LikeService {
@@ -98,7 +92,7 @@ public class LikeServiceImpl implements LikeService {
         Post post = postRepository.findById(id);
 
         if (post == null) {
-            throw new IllegalArgumentException("Post not found.");
+            throw new EntityNotFoundException("Post",id);
         }
 
         return post;
