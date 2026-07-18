@@ -44,7 +44,13 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public Tag getOrCreate(String name) {
 
-        return tagRepository.findByName(name)
+        String normalized;
+        if (name == null) {
+            normalized = "";
+        } else {
+            normalized = name.trim().toLowerCase();
+        }
+        return tagRepository.findByName(normalized)
                 .orElseGet(() -> {
                     Tag tag = new Tag();
                     tag.setName(name.trim().toLowerCase());

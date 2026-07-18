@@ -1,5 +1,8 @@
 package services;
 
+import com.backend.carsforum.exceptions.BlockedUserException;
+import com.backend.carsforum.exceptions.EntityNotFoundException;
+import com.backend.carsforum.exceptions.InvalidOperationException;
 import com.backend.carsforum.models.Comment;
 import com.backend.carsforum.models.Post;
 import com.backend.carsforum.models.User;
@@ -102,7 +105,7 @@ public class CommentServiceImplTest {
         Post postRef = new Post(); postRef.setId(5L);
         input.setPost(postRef);
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> commentService.create(input));
+        BlockedUserException ex = assertThrows(BlockedUserException.class, () -> commentService.create(input));
         assertEquals("Blocked users cannot comment.", ex.getMessage());
         verify(commentRepository, never()).save(any());
     }
@@ -115,10 +118,11 @@ public class CommentServiceImplTest {
         when(postRepository.findById(99L)).thenReturn(null);
 
         Comment input = new Comment();
-        Post p = new Post(); p.setId(99L); input.setPost(p);
-
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> commentService.create(input));
-        assertEquals("Post not found.", ex.getMessage());
+        Post p = new Post();
+        p.setId(99L);
+        input.setPost(p);
+        EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> commentService.create(input));
+        assertEquals("Post with id 99 not found.", ex.getMessage());
         verify(commentRepository, never()).save(any());
     }
 
@@ -149,12 +153,12 @@ public class CommentServiceImplTest {
         when(userService.getByUsername(current.getUsername())).thenReturn(current);
 
         Comment existing = testComment(200L, author, testPost(30L));
-        when(commentRepository.findById(100L)).thenReturn(java.util.Optional.of(existing));
+        when(commentRepository.findById(200L)).thenReturn(java.util.Optional.of(existing));
         Comment incoming = new Comment();
         incoming.setId(200L);
         incoming.setContent("x");
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> commentService.update(incoming));
+        InvalidOperationException ex = assertThrows(InvalidOperationException.class, () -> commentService.update(incoming));
         assertEquals("You cannot edit another user's comment.", ex.getMessage());
         verify(commentRepository, never()).update(any());
     }
@@ -183,7 +187,7 @@ public class CommentServiceImplTest {
         Comment existing = testComment(400L, author, testPost(50L));
         when(commentRepository.findById(400L)).thenReturn(Optional.of(existing));
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> commentService.delete(400L));
+        InvalidOperationException ex = assertThrows(InvalidOperationException.class, () -> commentService.delete(400L));
         assertEquals("You cannot delete another user's comment.", ex.getMessage());
         verify(commentRepository, never()).delete(any());
     }
