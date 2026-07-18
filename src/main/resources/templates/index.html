@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CarsForum - Начало</title>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+
+<div style="margin-bottom: 20px;">
+    <h2>CarsForum</h2>
+    <a th:href="@{/login}">Вход</a> |
+    <a th:href="@{/register}">Регистрация</a>
+</div>
+
+<hr>
+
+<h3>Добре дошли!</h3>
+<p>Брой регистрирани потребители: <strong th:text="${userCount ?: 0}">0</strong></p>
+<p>Общ брой създадени постове: <strong th:text="${postCount ?: 0}">0</strong></p>
+
+<hr>
+
+
+</body>
+</html>
