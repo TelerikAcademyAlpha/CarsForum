@@ -1,3 +1,5 @@
+@import url("details.css");
+
 /* =========================
    RESET
 ========================= */
@@ -234,11 +236,13 @@ body {
    POSTS
 ========================= */
 
-.posts-section {
+.posts-section{
 
-    width: 90%;
+    width:95%;
 
-    margin: 60px auto;
+    max-width:1700px;
+
+    margin:60px auto;
 }
 
 .posts-section h2 {
@@ -248,21 +252,26 @@ body {
     margin-bottom: 30px;
 }
 
-.posts-grid {
+.posts-grid{
 
-    display: grid;
+    display:grid;
 
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns:1fr;
 
-    gap: 25px;
+    gap:30px;
 }
 
 .post-card{
+
+    width:100%;
+
     background:#222;
+
     border:1px solid #333;
+
     border-radius:12px;
+
     padding:30px;
-    margin-bottom:35px;
 }
 
 .post-card:hover {
@@ -311,6 +320,16 @@ body {
 .read-more:hover {
 
     text-decoration: underline;
+}
+
+.back-to-home {
+
+    text-decoration: none;
+
+    color: #ff3b30;
+
+    font-weight: bold;
+
 }
 
 /* =========================

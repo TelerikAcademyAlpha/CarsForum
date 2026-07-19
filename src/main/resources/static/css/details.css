@@ -1,0 +1,385 @@
+/* ===========================================
+   POST DETAILS PAGE
+=========================================== */
+
+.post-container {
+
+    width: 900px;
+    max-width: 92%;
+
+    margin: 50px auto 80px;
+}
+
+.back-to-home {
+
+    text-decoration: none;
+
+    color: #ff4d3d;
+
+    font-weight: bold;
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+}
+
+/* ===========================================
+   POST CARD
+=========================================== */
+
+.post-card {
+
+    background: #222;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    margin-bottom: 35px;
+}
+
+.post-card h1 {
+
+    color: white;
+
+    font-size: 48px;
+
+    margin-bottom: 25px;
+}
+
+.post-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.post-header strong {
+
+    color: #ff4d3d;
+}
+
+.post-header small {
+
+    color: #888;
+}
+
+.post-content {
+
+    margin: 35px 0;
+
+    font-size: 22px;
+
+    line-height: 1.8;
+
+    color: #ddd;
+}
+
+.post-divider {
+
+    border: none;
+
+    border-top: 1px solid #444;
+
+    margin: 35px 0;
+}
+
+.post-footer {
+
+    display: flex;
+
+    align-items: center;
+}
+
+.like-btn {
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 34px;
+
+    padding: 0;
+}
+
+/* ===========================================
+   COMMENTS
+=========================================== */
+
+.comments {
+
+    background: #222;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    padding: 25px;
+}
+
+.comments h2 {
+
+    color: white;
+
+    margin-bottom: 30px;
+}
+
+/* ===========================================
+   COMMENT EDITOR
+=========================================== */
+
+.comment-editor {
+
+    background: #252525;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    margin-bottom: 35px;
+}
+
+.comment-editor textarea {
+
+    width: 100%;
+
+    min-height: 140px;
+
+    resize: vertical;
+
+    background: #1b1b1b;
+
+    border: 1px solid #444;
+
+    color: white;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    font-size: 15px;
+}
+
+.comment-editor textarea:focus {
+
+    outline: none;
+
+    border-color: #ff4d3d;
+
+    box-shadow: 0 0 8px rgba(255,77,61,.3);
+}
+
+/* ===========================================
+   COMMENT CARD
+=========================================== */
+
+.comment {
+
+    background: #252525;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    transition: .25s;
+}
+
+.comment:hover {
+
+    border-color: #ff4d3d;
+}
+
+.comment-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.comment-author {
+
+    color: #ff4d3d;
+
+    font-weight: bold;
+
+    font-size: 18px;
+}
+
+.comment-header small {
+
+    color: #888;
+}
+
+.comment p {
+
+    color: #ddd;
+
+    line-height: 1.8;
+
+    margin-bottom: 12px;
+}
+
+/* ===========================================
+   REPLY BUTTON
+=========================================== */
+
+.replyButton {
+
+    background: none;
+
+    border: none;
+
+    color: #ff4d3d;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+.replyButton:hover {
+
+    color: white;
+}
+
+/* ===========================================
+   REPLY FORM
+=========================================== */
+
+.reply-form {
+
+    display: none;
+
+    margin-top: 20px;
+
+    margin-left: 40px;
+
+    background: #1b1b1b;
+
+    border-left: 4px solid #ff4d3d;
+
+    border-radius: 10px;
+
+    padding: 18px;
+}
+
+.reply-form textarea {
+
+    width: 100%;
+
+    min-height: 90px;
+
+    resize: vertical;
+
+    background: #151515;
+
+    border: 1px solid #444;
+
+    color: white;
+
+    border-radius: 8px;
+
+    padding: 12px;
+}
+
+.reply-form button {
+
+    margin-top: 15px;
+}
+
+/* ===========================================
+   REPLIES
+=========================================== */
+
+.reply {
+
+    margin-top: 20px;
+
+    margin-left: 40px;
+
+    background: #1b1b1b;
+
+    border-left: 4px solid #ff4d3d;
+
+    border-radius: 10px;
+
+    padding: 18px;
+}
+
+/* ===========================================
+   VALIDATION
+=========================================== */
+
+.error {
+
+    border: 2px solid #ff4d3d !important;
+}
+
+.field-errorr {
+
+    color: #ff4d3d;
+
+    margin-top: 8px;
+
+    font-size: 14px;
+}
+
+/* ===========================================
+   MOBILE
+=========================================== */
+
+@media(max-width:768px){
+
+    .post-container{
+
+        width:95%;
+    }
+
+    .post-card h1{
+
+        font-size:34px;
+    }
+
+    .post-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:10px;
+    }
+
+    .reply{
+
+        margin-left:20px;
+    }
+
+    .reply-form{
+
+        margin-left:20px;
+    }
+
+}
