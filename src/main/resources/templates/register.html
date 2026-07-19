@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация - CarsForum</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .register-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 340px; }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; color: #666; font-size: 14px; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background-color: #28a745; border: none; border-radius: 4px; color: white; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #218838; }
+        .links { text-align: center; margin-top: 15px; font-size: 14px; }
+        .links a { color: #007bff; text-decoration: none; }
+        .links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="register-container">
+    <h2>Регистрация</h2>
+
+    <!-- Формата изпраща данните към нормалния UserController -->
+    <form th:action="@{/register}" method="post">
+        <div class="form-group">
+            <label>Потребителско име</label>
+            <input type="text" name="username" required />
+        </div>
+        <div class="form-group">
+            <label>Имейл</label>
+            <input type="email" name="email" required />
+        </div>
+        <div class="form-group">
+            <label>Име</label>
+            <input type="text" name="firstName" required />
+        </div>
+        <div class="form-group">
+            <label>Фамилия</label>
+            <input type="text" name="lastName" required />
+        </div>
+        <div class="form-group">
+            <label>Парола</label>
+            <input type="password" name="password" required />
+        </div>
+        <button type="submit">Създай профил</button>
+    </form>
+
+    <div class="links">
+        Вече имаш профил? <a th:href="@{/login}">Влез тук</a>
+    </div>
+</div>
+
+</body>
+</html>

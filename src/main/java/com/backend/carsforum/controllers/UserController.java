@@ -1,18 +1,18 @@
 package com.backend.carsforum.controllers;
 
-import com.backend.carsforum.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "register";
     }
 }
