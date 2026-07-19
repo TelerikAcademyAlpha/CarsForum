@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Вход - CarsForum</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .login-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 320px; }
+    h2 { text-align: center; margin-bottom: 20px; color: #333; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; color: #666; font-size: 14px; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+    button { width: 100%; padding: 10px; background-color: #007bff; border: none; border-radius: 4px; color: white; font-size: 16px; cursor: pointer; margin-top: 10px; }
+    button:hover { background-color: #0056b3; }
+    .links { text-align: center; margin-top: 15px; font-size: 14px; }
+    .links a { color: #28a745; text-decoration: none; font-weight: bold; }
+    .links a:hover { text-decoration: underline; }
+    .error { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 8px; border-radius: 4px; text-align: center; margin-bottom: 15px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Вход във форума</h2>
+
+  <!-- Автоматично показва съобщение, ако Spring Security върне грешка -->
+  <div th:if="${param.error}" class="error">
+    Грешно потребителско име или парола!
+  </div>
+
+  <!-- Формата изпраща данните директно към Spring Security логин обработката -->
+  <form th:action="@{/login}" method="post">
+    <div class="form-group">
+      <label>Потребителско име</label>
+      <input type="text" name="username" required autofocus />
+    </div>
+    <div class="form-group">
+      <label>Парола</label>
+      <input type="password" name="password" required />
+    </div>
+    <button type="submit">Влез</button>
+  </form>
+
+  <div class="links">
+    Нямаш профил? <a th:href="@{/register}">Регистрирай се</a>
+  </div>
+</div>
+
+</body>
+</html>
