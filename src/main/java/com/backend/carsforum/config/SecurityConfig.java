@@ -69,33 +69,36 @@ public class SecurityConfig {
                                 "/",
                                 "/api/users/register",
                                 "/api/users/login",
+                                "/users/register",
+                                "/login",
                                 "/error",
                                 "/css/**",
-                                "/images/**"
+                                "/images/**",
+                                "/js/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
 
-                );
+                )
 //for html
-//                .formLogin(form -> form
-//
-//                        .loginPage("/login")
-//
-//                        .defaultSuccessUrl("/", true)
-//
-//                        .permitAll()
-//
-//                )
+                .formLogin(form -> form
+
+                        .loginProcessingUrl("/login")
+
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/?error")
+                        .permitAll()
+
+                )
 
 
-//                .logout(logout -> logout
-//
-//                        .logoutSuccessUrl("/")
-//
-//                        .permitAll()
-//
-//                );
+                .logout(logout -> logout
+
+                        .logoutSuccessUrl("/")
+
+                        .permitAll()
+
+                );
 
         return http.build();
     }
