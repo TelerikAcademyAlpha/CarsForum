@@ -8,13 +8,14 @@ import com.backend.carsforum.models.User;
 import com.backend.carsforum.models.dtos.request.UpdateUserRequest;
 import com.backend.carsforum.repositories.UserRepository;
 import com.backend.carsforum.security.AuthenticationFacade;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -30,7 +31,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User register(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new EntityDuplicateException("User", "username", user.getUsername());
@@ -73,7 +73,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User updateProfile(UpdateUserRequest request) {
 
         User current = getCurrentUser();
@@ -101,7 +100,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void block(Long id) {
         User user = getExistingUser(id);
         user.setBlocked(true);
@@ -109,7 +107,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void unblock(Long id) {
         User user = getExistingUser(id);
         user.setBlocked(false);
@@ -117,7 +114,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void promoteToAdmin(Long id) {
         User user = getExistingUser(id);
         user.setRole(Role.ADMIN);
@@ -140,7 +136,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User update(User updatedUser) {
         User existing = getExistingUser(updatedUser.getId());
 

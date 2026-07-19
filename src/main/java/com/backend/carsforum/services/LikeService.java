@@ -9,4 +9,6 @@ public interface LikeService {
     boolean isLiked(Long postId);
 
     long countLikes(Long postId);
+
+    void toggle(Long postId);
 }

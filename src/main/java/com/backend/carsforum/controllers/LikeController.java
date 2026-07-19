@@ -3,6 +3,8 @@ package com.backend.carsforum.controllers;
 import com.backend.carsforum.services.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -14,5 +16,13 @@ public class LikeController {
     @Autowired
     public LikeController(LikeService likeService) {
         this.likeService = likeService;
+    }
+
+    @PostMapping("/{postId}")
+    public String toggleLike(@PathVariable Long postId) {
+
+        likeService.toggle(postId);
+
+        return "redirect:/posts/" + postId;
     }
 }

@@ -1,25 +1,275 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
-    <title>CarsForum - Начало</title>
-</head>
-<body style="font-family: Arial, sans-serif; padding: 20px;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div style="margin-bottom: 20px;">
-    <h2>CarsForum</h2>
-    <a th:href="@{/login}">Вход</a> |
-    <a th:href="@{/register}">Регистрация</a>
+    <title>Cars Forum</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <a th:href="@{/}">
+                🚗 Cars Forum
+            </a>
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a th:href="@{/}">Home</a>
+            </li>
+
+            <li>
+                <a th:href="@{/posts}">Posts</a>
+            </li>
+
+            <li>
+                <a th:href="@{/posts/latest}">Latest</a>
+            </li>
+
+            <li>
+                <a th:href="@{/posts/top-commented}">
+                    Top Commented
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="nav-buttons">
+
+            <!-- Anonymous -->
+
+            <div sec:authorize="isAnonymous()">
+
+                <button id="loginButton">
+                    Login / Register
+                </button>
+
+            </div>
+
+            <!-- Logged user -->
+
+            <div sec:authorize="isAuthenticated()">
+
+                <button
+                        id="newPostButton"
+                        class="nav-btn"
+                        type="button">
+                    New Post
+                </button>
+
+                <a class="nav-btn"
+                   th:href="@{/users/profile}">
+                    Profile
+                </a>
+
+                <a class="nav-btn"
+                   th:href="@{/logout}">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>Welcome to Cars Forum</h1>
+
+    <p>
+        Share your passion for cars.
+        Discuss everything from classic muscle
+        to the newest supercars.
+    </p>
+
+
+    <!-- Logged user -->
+    <button
+            sec:authorize="isAuthenticated()"
+            id="createPostButton"
+            class="create-btn"
+            type="button">
+        Create Post
+    </button>
+
+    <!-- Anonymous -->
+    <button
+            sec:authorize="isAnonymous()"
+            id="guestCreatePostButton"
+            class="create-btn"
+            type="button">
+        Create Post
+    </button>
+
+</section>
+
+<!-- ================= STATS ================= -->
+
+<section class="stats">
+
+    <div class="stat-card">
+
+        <h2 th:text="${userCount}">0</h2>
+
+        <p>Registered Users</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 th:text="${postCount}">0</h2>
+
+        <p>Posts</p>
+
+    </div>
+
+</section>
+
+<!-- ================= LATEST POSTS ================= -->
+
+<section class="posts-section">
+
+    <h2>Latest Posts</h2>
+
+    <div class="posts-grid">
+
+        <div class="post-card"
+             th:each="post : ${latestPosts}">
+
+            <h3 th:text="${post.title}">
+                Post title
+            </h3>
+
+            <p class="description"
+               th:text="${post.content}">
+                Description
+            </p>
+
+            <div class="card-footer">
+
+                <span>
+                    ❤️
+                    <span th:text="${post.likes.size()}">0</span>
+                </span>
+
+                <span>
+                    💬
+                    <span th:text="${post.comments.size()}">0</span>
+                </span>
+
+            </div>
+
+            <a class="read-more"
+               th:href="@{/posts/{id}(id=${post.id})}">
+                Read More →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= TOP COMMENTED ================= -->
+
+<section class="posts-section">
+
+    <h2>Top Commented Posts</h2>
+
+    <div class="posts-grid">
+
+        <div class="post-card"
+             th:each="post : ${topCommentedPosts}">
+
+            <h3 th:text="${post.title}">
+                Post title
+            </h3>
+
+            <p class="description"
+               th:text="${post.content}">
+                Description
+            </p>
+
+            <div class="card-footer">
+
+                <span>
+                    ❤️
+                    <span th:text="${post.likes.size()}">0</span>
+                </span>
+
+                <span>
+                    💬
+                    <span th:text="${post.comments.size()}">0</span>
+                </span>
+
+            </div>
+
+            <a class="read-more"
+               th:href="@{/posts/{id}(id=${post.id})}">
+                Read More →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= LOGIN MODAL ================= -->
+
+<div th:replace="~{fragments/authModal :: authModal}"></div>
+
+<div
+        sec:authorize="isAuthenticated()"
+        th:replace="~{fragments/postModal :: createPostModal}">
 </div>
 
-<hr>
+<!-- ================= FOOTER ================= -->
 
-<h3>Добре дошли!</h3>
-<p>Брой регистрирани потребители: <strong th:text="${userCount ?: 0}">0</strong></p>
-<p>Общ брой създадени постове: <strong th:text="${postCount ?: 0}">0</strong></p>
+<footer>
 
-<hr>
+    <h3>Cars Forum</h3>
 
+    <p>
+        Built with Spring Boot, Spring MVC,
+        Spring Security and Thymeleaf.
+    </p>
 
+    <p>
+        © 2026 Cars Forum
+    </p>
+
+</footer>
+
+<input
+        type="hidden"
+        id="loginError"
+        th:value="${loginError}">
+
+<input
+        type="hidden"
+        id="showRegister"
+        th:value="${showRegister}">
+
+<script th:src="@{/js/app.js}"></script>
 </body>
 </html>

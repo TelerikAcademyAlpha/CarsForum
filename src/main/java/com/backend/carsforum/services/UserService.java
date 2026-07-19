@@ -1,6 +1,7 @@
 package com.backend.carsforum.services;
 
 import com.backend.carsforum.models.User;
+import com.backend.carsforum.models.dtos.request.RegisterRequest;
 import com.backend.carsforum.models.dtos.request.UpdateUserRequest;
 
 import java.util.List;

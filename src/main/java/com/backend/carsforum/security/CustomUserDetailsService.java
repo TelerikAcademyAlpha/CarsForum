@@ -2,6 +2,7 @@ package com.backend.carsforum.security;
 
 import com.backend.carsforum.models.User;
 import com.backend.carsforum.repositories.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 

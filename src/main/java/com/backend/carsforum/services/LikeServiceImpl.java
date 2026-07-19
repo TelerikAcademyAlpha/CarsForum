@@ -97,4 +97,15 @@ public class LikeServiceImpl implements LikeService {
 
         return post;
     }
+
+    @Override
+    @Transactional
+    public void toggle(Long postId) {
+
+        if (isLiked(postId)) {
+            unlike(postId);
+        } else {
+            like(postId);
+        }
+    }
 }
