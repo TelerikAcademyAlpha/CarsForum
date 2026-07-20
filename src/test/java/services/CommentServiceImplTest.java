@@ -1,16 +1,16 @@
 package services;
 
-import com.backend.carsforum.exceptions.BlockedUserException;
-import com.backend.carsforum.exceptions.EntityNotFoundException;
-import com.backend.carsforum.exceptions.InvalidOperationException;
-import com.backend.carsforum.models.Comment;
-import com.backend.carsforum.models.Post;
-import com.backend.carsforum.models.User;
-import com.backend.carsforum.repositories.CommentRepository;
-import com.backend.carsforum.repositories.PostRepository;
-import com.backend.carsforum.security.AuthenticationFacade;
-import com.backend.carsforum.services.CommentServiceImpl;
-import com.backend.carsforum.services.UserService;
+import com.backend.forum.exceptions.BlockedUserException;
+import com.backend.forum.exceptions.EntityNotFoundException;
+import com.backend.forum.exceptions.InvalidOperationException;
+import com.backend.forum.models.Comment;
+import com.backend.forum.models.Post;
+import com.backend.forum.models.User;
+import com.backend.forum.repositories.CommentRepository;
+import com.backend.forum.repositories.PostRepository;
+import com.backend.forum.security.AuthenticationFacade;
+import com.backend.forum.services.CommentServiceImpl;
+import com.backend.forum.services.UserService;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

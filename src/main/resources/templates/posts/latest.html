@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Latest Posts</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/latest-posts.css}">
+
+</head>
+
+<body>
+
+<header>
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+</header>
+
+<section class="latest-header">
+
+    <h1>Latest Posts</h1>
+
+    <p>
+        Discover the newest discussions from the Community Forum.
+    </p>
+
+</section>
+
+<section class="posts-section">
+
+    <div class="posts-grid">
+
+        <div class="post-card"
+             th:each="post : ${posts}">
+
+            <h2>
+
+                <a th:href="@{/posts/{id}(id=${post.id})}"
+                   th:text="${post.title}">
+                    Title
+                </a>
+
+            </h2>
+
+            <p class="description"
+               th:text="${#strings.abbreviate(post.content,220)}">
+            </p>
+
+            <div class="card-meta">
+
+                <span>
+
+                    👤
+
+                    <span th:text="${post.author.username}"></span>
+
+                </span>
+
+                <span>
+
+                    📅
+
+                    <span th:text="${#temporals.format(post.createdAt,'dd MMM yyyy')}"></span>
+
+                </span>
+
+            </div>
+
+            <div class="card-footer">
+
+                <div class="card-stats">
+
+                    <span>
+
+                        ❤️
+
+                        <span th:text="${post.likes.size()}"></span>
+
+                    </span>
+
+                    <span>
+
+                        💬
+
+                        <span th:text="${post.comments.size()}"></span>
+
+                    </span>
+
+                </div>
+
+                <a class="read-more"
+                   th:href="@{/posts/{id}(id=${post.id})}">
+                    Read More →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <h3>Community Forum</h3>
+
+    <p>
+        Built with Spring Boot, Spring MVC,
+        Spring Security and Thymeleaf.
+    </p>
+
+    <p>
+        © 2026 Community Forum
+    </p>
+
+</footer>
+
+</body>
+
+</html>

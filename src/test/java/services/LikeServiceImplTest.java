@@ -1,14 +1,14 @@
 package services;
 
-import com.backend.carsforum.exceptions.EntityNotFoundException;
-import com.backend.carsforum.models.Like;
-import com.backend.carsforum.models.Post;
-import com.backend.carsforum.models.User;
-import com.backend.carsforum.repositories.LikeRepository;
-import com.backend.carsforum.repositories.PostRepository;
-import com.backend.carsforum.security.AuthenticationFacade;
-import com.backend.carsforum.services.LikeServiceImpl;
-import com.backend.carsforum.services.UserService;
+import com.backend.forum.exceptions.EntityNotFoundException;
+import com.backend.forum.models.Like;
+import com.backend.forum.models.Post;
+import com.backend.forum.models.User;
+import com.backend.forum.repositories.LikeRepository;
+import com.backend.forum.repositories.PostRepository;
+import com.backend.forum.security.AuthenticationFacade;
+import com.backend.forum.services.LikeServiceImpl;
+import com.backend.forum.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
