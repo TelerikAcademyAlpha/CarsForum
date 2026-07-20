@@ -1,6 +1,8 @@
 package com.backend.forum.services;
 
 import com.backend.forum.models.Post;
+import com.backend.forum.models.dtos.request.UpdatePostRequest;
+
 import java.util.List;
 
 public interface PostService {
@@ -11,6 +13,8 @@ public interface PostService {
     void delete(Long id);
 
     Post getById(Long id);
+
+    Post update(Long id, UpdatePostRequest request);
 
     List<Post> getByAuthor(Long authorId);
 

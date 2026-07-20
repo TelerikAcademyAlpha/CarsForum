@@ -21,7 +21,7 @@
             </li>
 
             <li>
-                <a th:href="@{/posts}">Posts</a>
+                <a th:href="@{/posts/my-posts}">My Posts</a>
             </li>
 
             <li>
@@ -71,6 +71,15 @@
                         type="button">
                     New Post
                 </button>
+
+                <a
+                        sec:authorize="hasRole('ADMIN')"
+                        class="nav-btn"
+                        th:href="@{/admin}">
+
+                    Admin
+
+                </a>
 
                 <a class="nav-btn"
                    th:href="@{/users/profile}">

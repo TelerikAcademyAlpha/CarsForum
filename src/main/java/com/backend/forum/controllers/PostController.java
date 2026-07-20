@@ -2,15 +2,18 @@ package com.backend.forum.controllers;
 
 import com.backend.forum.mapper.PostMapper;
 import com.backend.forum.models.Post;
+import com.backend.forum.models.User;
 import com.backend.forum.models.dtos.request.CreateCommentRequest;
 import com.backend.forum.models.dtos.request.CreatePostRequest;
 import com.backend.forum.models.dtos.request.RegisterRequest;
+import com.backend.forum.models.dtos.request.UpdatePostRequest;
 import com.backend.forum.models.dtos.response.PostResponse;
 import com.backend.forum.services.LikeService;
 import com.backend.forum.services.PostService;
 import com.backend.forum.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -88,6 +91,10 @@ public class PostController {
         model.addAttribute("post", post);
 
         model.addAttribute(
+                "currentUser",
+                userService.getCurrentUser());
+
+        model.addAttribute(
                 "liked",
                 likeService.isLiked(id));
 
@@ -132,5 +139,37 @@ public class PostController {
                 keyword);
 
         return "posts/search";
+    }
+
+    @GetMapping("/my-posts")
+    public String myPosts(
+            Authentication authentication,
+            Model model) {
+
+        User user = userService.getByUsername(authentication.getName());
+
+        model.addAttribute(
+                "posts",
+                postService.getByAuthor(user.getId()));
+
+        return "posts/my-posts";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String updatePost(
+            @PathVariable Long id,
+            @ModelAttribute UpdatePostRequest request) {
+
+        postService.update(id, request);
+
+        return "redirect:/posts/my-posts";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable Long id) {
+
+        postService.delete(id);
+
+        return "redirect:/posts/my-posts";
     }
 }

@@ -383,3 +383,108 @@
     }
 
 }
+
+.comment-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:12px;
+
+}
+
+.edit-comment-btn,
+.save-comment-btn,
+.cancel-comment-btn{
+
+    border:none;
+
+    border-radius:8px;
+
+    padding:8px 18px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+/* Edit */
+
+.edit-comment-btn{
+
+    background:#ff5a4e;
+
+    color:white;
+
+}
+
+.edit-comment-btn:hover{
+
+    background:#ff7469;
+
+}
+
+/* Save */
+
+.save-comment-btn{
+
+    background:#28a745;
+
+    color:white;
+
+}
+
+.save-comment-btn:hover{
+
+    background:#34c759;
+
+}
+
+/* Cancel */
+
+.cancel-comment-btn{
+
+    background:#444;
+
+    color:#ddd;
+
+}
+
+.cancel-comment-btn:hover{
+
+    background:#555;
+
+}
+
+
+.edit-comment-textarea{
+
+    width:100%;
+
+    min-height:70px;
+
+    resize:vertical;
+
+    margin-top:10px;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    background:#1b1b1b;
+
+    color:white;
+
+    border:1px solid #444;
+
+    font-size:15px;
+
+}

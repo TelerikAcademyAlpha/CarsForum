@@ -3,6 +3,7 @@ package com.backend.forum.controllers;
 import com.backend.forum.models.Comment;
 import com.backend.forum.models.Post;
 import com.backend.forum.models.dtos.request.CreateCommentRequest;
+import com.backend.forum.models.dtos.request.UpdateCommentRequest;
 import com.backend.forum.services.CommentService;
 import com.backend.forum.services.LikeService;
 import com.backend.forum.services.PostService;
@@ -79,6 +80,35 @@ public class CommentController {
         reply.setContent(request.getContent());
 
         commentService.reply(commentId, reply);
+
+        return "redirect:/posts/" + postId;
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteComment(
+            @PathVariable Long id) {
+
+        Long postId = commentService
+                .getById(id)
+                .getPost()
+                .getId();
+
+        commentService.delete(id);
+
+        return "redirect:/posts/" + postId;
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editComment(
+            @PathVariable Long id,
+            @ModelAttribute UpdateCommentRequest request) {
+
+        Long postId = commentService
+                .getById(id)
+                .getPost()
+                .getId();
+
+        commentService.update(id, request);
 
         return "redirect:/posts/" + postId;
     }

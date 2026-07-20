@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="admin-container">
+
+    <h1>🛠 Admin Dashboard</h1>
+
+    <div class="admin-card">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h2 th:text="${usersCount}"></h2>
+
+                <p>👥 Users</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2 th:text="${postsCount}"></h2>
+
+                <p>📝 Posts</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2 th:text="${commentsCount}"></h2>
+
+                <p>💬 Comments</p>
+
+            </div>
+
+        </div>
+
+        <table class="admin-table">
+
+            <thead>
+
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+                <th>Status</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:each="user : ${users}">
+
+                <td th:text="${user.username}"></td>
+
+                <td th:text="${user.email}"></td>
+
+                <td>
+
+                    <span
+                            class="role"
+                            th:text="${user.role}">
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <div th:if="${user.role.name() == 'USER'}">
+
+                            <form
+                                    th:action="@{/admin/promote/{id}(id=${user.id})}"
+                                    method="post">
+
+                                <button
+                                        class="admin-btn"
+                                        type="submit">
+
+                                    ⬆ Promote
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <div
+                                class="admin-actions"
+                                th:if="${user.role.name() == 'ADMIN'}">
+
+                            <span class="admin-crown">👑</span>
+
+                            <form
+                                    th:action="@{/admin/demote/{id}(id=${user.id})}"
+                                    method="post">
+
+                                <button
+                                        class="admin-btn"
+                                        type="submit">
+
+                                    ⬇ Demote
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <div th:if="${!user.blocked}">
+
+                            <form
+                                    th:action="@{/admin/block/{id}(id=${user.id})}"
+                                    method="post">
+
+                                <button
+                                        class="admin-btn block-btn"
+                                        type="submit">
+
+                                    🚫 Block
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <div th:if="${user.blocked}">
+
+                            <form
+                                    th:action="@{/admin/unblock/{id}(id=${user.id})}"
+                                    method="post">
+
+                                <button
+                                        class="admin-btn unblock-btn"
+                                        type="submit">
+
+                                    ✅ Unblock
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+                <td>
+                <td>
+
+    <span
+            class="status active"
+            th:if="${!user.blocked}">
+
+        🟢 Active
+
+    </span>
+
+                    <span
+                            class="status blocked"
+                            th:if="${user.blocked}">
+
+        🔴 Blocked
+
+    </span>
+
+                </td>
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
