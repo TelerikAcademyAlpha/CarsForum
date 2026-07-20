@@ -78,6 +78,14 @@ public class UserServiceImpl implements UserService {
         User current = getCurrentUser();
 
         // duplicate email check
+        if (!current.getEmail().equals(request.getEmail())
+                && userRepository.existsByEmail(request.getEmail())) {
+
+            throw new EntityDuplicateException(
+                    "User",
+                    "email",
+                    request.getEmail());
+        }
 
         userMapper.updateEntity(request, current);
 

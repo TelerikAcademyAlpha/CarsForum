@@ -4,14 +4,18 @@ import com.backend.forum.exceptions.EntityDuplicateException;
 import com.backend.forum.mapper.UserMapper;
 import com.backend.forum.models.User;
 import com.backend.forum.models.dtos.request.RegisterRequest;
+import com.backend.forum.models.dtos.request.UpdateUserRequest;
 import com.backend.forum.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -53,5 +57,26 @@ public class UserController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/users/profile")
+    public String profile(
+            Authentication authentication,
+            Model model) {
+
+        User user = userService.getByUsername(authentication.getName());
+
+        model.addAttribute("user", user);
+
+        return "users/profile";
+    }
+
+    @PostMapping("/users/profile")
+    public String updateProfile(
+            @ModelAttribute UpdateUserRequest request) {
+
+        userService.updateProfile(request);
+
+        return "redirect:/users/profile";
     }
 }

@@ -28,6 +28,10 @@ const newPostButton = document.getElementById("newPostButton");
 
 const guestCreatePostButton = document.getElementById("guestCreatePostButton");
 
+const editBtn = document.getElementById("openEditProfile");
+
+const saveBtn = document.getElementById("saveBtn");
+
 
 // ================= MODAL =================
 
@@ -209,3 +213,24 @@ document.querySelectorAll(".replyButton").forEach(button => {
     });
 
 });
+
+// edit profile
+if (editBtn && saveBtn) {
+
+    editBtn.addEventListener("click", () => {
+
+        document.querySelectorAll("#profileForm input")
+            .forEach(input => {
+
+                if (input.name !== "") {
+                    input.disabled = false;
+                }
+
+            });
+
+        editBtn.style.display = "none";
+        saveBtn.style.display = "inline-block";
+
+    });
+
+}
