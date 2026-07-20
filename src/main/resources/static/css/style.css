@@ -1,4 +1,6 @@
 @import url("details.css");
+@import url("latest-posts.css");
+@import url("top-commented.css");
 
 /* =========================
    RESET
@@ -129,7 +131,7 @@ body {
                     rgba(0,0,0,.7),
                     rgba(0,0,0,.7)
             ),
-            url("../images/cars-banner.png");
+            url("../images/forum-banner.png");
 
     background-size: cover;
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+<header th:fragment="navbar">
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <a th:href="@{/}">
+                💬 Community Forum
+            </a>
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a th:href="@{/}">Home</a>
+            </li>
+
+            <li>
+                <a th:href="@{/posts}">Posts</a>
+            </li>
+
+            <li>
+                <a th:href="@{/posts/latest}">Latest</a>
+            </li>
+
+            <li>
+                <a th:href="@{/posts/top-commented}">
+                    Top Commented
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="nav-buttons">
+
+            <div sec:authorize="isAnonymous()">
+
+                <button id="loginButton">
+                    Login / Register
+                </button>
+
+            </div>
+
+            <div sec:authorize="isAuthenticated()">
+
+                <button
+                        id="newPostButton"
+                        class="nav-btn"
+                        type="button">
+                    New Post
+                </button>
+
+                <a class="nav-btn"
+                   th:href="@{/users/profile}">
+                    Profile
+                </a>
+
+                <a class="nav-btn"
+                   th:href="@{/logout}">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+</body>
+
+</html>

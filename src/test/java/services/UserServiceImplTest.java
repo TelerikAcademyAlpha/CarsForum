@@ -1,14 +1,14 @@
 package services;
 
-import com.backend.carsforum.exceptions.EntityDuplicateException;
-import com.backend.carsforum.exceptions.EntityNotFoundException;
-import com.backend.carsforum.mapper.UserMapper;
-import com.backend.carsforum.models.Role;
-import com.backend.carsforum.models.User;
-import com.backend.carsforum.models.dtos.request.UpdateUserRequest;
-import com.backend.carsforum.repositories.UserRepository;
-import com.backend.carsforum.security.AuthenticationFacade;
-import com.backend.carsforum.services.UserServiceImpl;
+import com.backend.forum.exceptions.EntityDuplicateException;
+import com.backend.forum.exceptions.EntityNotFoundException;
+import com.backend.forum.mapper.UserMapper;
+import com.backend.forum.models.Role;
+import com.backend.forum.models.User;
+import com.backend.forum.models.dtos.request.UpdateUserRequest;
+import com.backend.forum.repositories.UserRepository;
+import com.backend.forum.security.AuthenticationFacade;
+import com.backend.forum.services.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

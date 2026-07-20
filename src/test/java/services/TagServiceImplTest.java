@@ -1,10 +1,10 @@
 package services;
 
-import com.backend.carsforum.exceptions.EntityDuplicateException;
-import com.backend.carsforum.exceptions.EntityNotFoundException;
-import com.backend.carsforum.models.Tag;
-import com.backend.carsforum.repositories.TagRepository;
-import com.backend.carsforum.services.TagServiceImpl;
+import com.backend.forum.exceptions.EntityDuplicateException;
+import com.backend.forum.exceptions.EntityNotFoundException;
+import com.backend.forum.models.Tag;
+import com.backend.forum.repositories.TagRepository;
+import com.backend.forum.services.TagServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
