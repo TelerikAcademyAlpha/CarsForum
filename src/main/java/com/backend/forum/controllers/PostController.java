@@ -5,6 +5,7 @@ import com.backend.forum.models.Post;
 import com.backend.forum.models.dtos.request.CreateCommentRequest;
 import com.backend.forum.models.dtos.request.CreatePostRequest;
 import com.backend.forum.models.dtos.request.RegisterRequest;
+import com.backend.forum.models.dtos.response.PostResponse;
 import com.backend.forum.services.LikeService;
 import com.backend.forum.services.PostService;
 import com.backend.forum.services.UserService;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
@@ -113,5 +116,21 @@ public class PostController {
                 postService.findAll());
 
         return "posts/allPosts";
+    }
+
+    @GetMapping("/search")
+    public String search(
+            @RequestParam String keyword,
+            Model model) {
+
+        model.addAttribute(
+                "posts",
+                postService.search(keyword));
+
+        model.addAttribute(
+                "keyword",
+                keyword);
+
+        return "posts/search";
     }
 }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Search Results</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/latest-posts.css}">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<section class="latest-header">
+
+    <h1>Search Results</h1>
+
+    <p class="search-info">
+
+        Showing results for
+
+        "<strong th:text="${keyword}"></strong>"
+
+    </p>
+
+</section>
+
+<section class="posts-section">
+
+    <div class="no-results"
+         th:if="${#lists.isEmpty(posts)}">
+
+        <h2>No posts found</h2>
+
+        <p>
+
+            We couldn't find any posts matching
+
+            "<strong th:text="${keyword}"></strong>".
+
+        </p>
+
+    </div>
+
+    <div class="posts-grid"
+         th:unless="${#lists.isEmpty(posts)}">
+
+        <article class="post-card"
+                 th:each="post : ${posts}">
+
+            <h2>
+
+                <a th:href="@{/posts/{id}(id=${post.id})}"
+                   th:text="${post.title}">
+                    Post Title
+                </a>
+
+            </h2>
+
+            <p class="description"
+               th:text="${#strings.abbreviate(post.content, 220)}">
+                Post description...
+            </p>
+
+            <div class="card-meta">
+
+                <span>
+
+                    👤
+
+                    <span th:text="${post.author.username}">
+                        Author
+                    </span>
+
+                </span>
+
+                <span>
+
+                    📅
+
+                    <span th:text="${#temporals.format(post.createdAt,'dd MMM yyyy')}">
+                        Date
+                    </span>
+
+                </span>
+
+            </div>
+
+            <div class="card-footer">
+
+                <div class="card-stats">
+
+                    <span>
+
+                        ❤️
+
+                        <span th:text="${post.likes.size()}">
+                            0
+                        </span>
+
+                    </span>
+
+                    <span>
+
+                        💬
+
+                        <span th:text="${post.comments.size()}">
+                            0
+                        </span>
+
+                    </span>
+
+                </div>
+
+                <a class="read-more"
+                   th:href="@{/posts/{id}(id=${post.id})}">
+                    Read More →
+                </a>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>
