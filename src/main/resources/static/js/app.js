@@ -234,3 +234,79 @@ if (editBtn && saveBtn) {
     });
 
 }
+
+
+// ================= MY POSTS =================
+
+document.querySelectorAll(".edit-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const id = button.dataset.id;
+
+        const title = document.getElementById("title-" + id);
+        const content = document.getElementById("content-" + id);
+
+        const save = document.getElementById("save-" + id);
+        const cancel = document.getElementById("cancel-" + id);
+        const view = document.getElementById("view-" + id);
+
+        title.disabled = false;
+        content.disabled = false;
+
+        button.style.display = "none";
+        save.style.display = "inline-block";
+        cancel.style.display = "inline-block";
+        view.style.display = "none";
+
+    });
+
+});
+
+document.querySelectorAll(".cancel-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        location.reload();
+
+    });
+
+});
+
+
+// edit comment
+// ================= EDIT COMMENTS =================
+
+document.querySelectorAll(".edit-comment-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const id = button.dataset.id;
+
+        const textarea = document.getElementById("comment-" + id);
+
+        const save = document.getElementById("save-comment-" + id);
+
+        const cancel = document.getElementById("cancel-comment-" + id);
+
+        textarea.disabled = false;
+
+        button.style.display = "none";
+
+        save.style.display = "inline-block";
+
+        cancel.style.display = "inline-block";
+
+    });
+
+});
+
+document.querySelectorAll(".cancel-comment-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        location.reload();
+
+    });
+
+});

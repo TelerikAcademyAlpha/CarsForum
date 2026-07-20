@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>My Posts</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/my-posts.css}">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<section class="my-posts-section">
+
+    <h1>📝 My Posts</h1>
+
+    <div class="posts-grid">
+
+        <div class="post-card"
+             th:each="post : ${posts}">
+
+            <form
+                    th:action="@{/posts/{id}/edit(id=${post.id})}"
+                    method="post"
+                    th:id="'form-' + ${post.id}">
+
+                <input
+                        class="post-title"
+                        th:id="'title-' + ${post.id}"
+                        type="text"
+                        name="title"
+                        th:value="${post.title}"
+                        disabled>
+
+                <textarea
+                        class="post-content"
+                        th:id="'content-' + ${post.id}"
+                        name="content"
+                        disabled
+                        th:text="${post.content}">
+                </textarea>
+
+                <div class="post-info">
+
+                    <span th:text="${#temporals.format(post.createdAt,'dd MMM yyyy')}"></span>
+
+                    <span>
+                        ❤️
+                        <span th:text="${post.likes.size()}"></span>
+                    </span>
+
+                    <span>
+                        💬
+                        <span th:text="${post.comments.size()}"></span>
+                    </span>
+
+                </div>
+
+                <div class="post-actions">
+
+                    <a
+                            class="view-btn"
+                            th:href="@{/posts/{id}(id=${post.id})}"
+                            th:id="'view-' + ${post.id}">
+                        View
+                    </a>
+
+                    <button
+                            type="button"
+                            class="edit-btn"
+                            th:data-id="${post.id}">
+                        Edit
+                    </button>
+
+                    <button
+                            type="submit"
+                            class="save-btn"
+                            th:id="'save-' + ${post.id}"
+                            style="display:none;">
+                        Save
+                    </button>
+
+                    <button
+                            type="button"
+                            class="cancel-btn"
+                            th:id="'cancel-' + ${post.id}"
+                            style="display:none;">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+            <form
+                    th:action="@{/posts/{id}/delete(id=${post.id})}"
+                    method="post"
+                    class="delete-form">
+
+                <button
+                        class="delete-btn">
+
+                    Delete
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/app.js}"></script>
+
+</body>
+
+</html>

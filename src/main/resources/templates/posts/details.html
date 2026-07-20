@@ -128,7 +128,8 @@
 
         <div
                 class="post-card"
-                th:each="comment : ${post.comments}">
+                th:each="comment : ${post.comments}"
+                th:if="${comment.parentComment == null}">
 
             <div class="comment-header">
 
@@ -143,9 +144,54 @@
 
             </div>
 
-            <p
-                    th:text="${comment.content}">
-            </p>
+            <form
+                    th:action="@{/comments/{id}/edit(id=${comment.id})}"
+                    method="post">
+
+                    <textarea
+                            class="edit-comment-textarea"
+                            rows="3"
+                            th:id="'comment-' + ${comment.id}"
+                            name="content"
+                            disabled
+                            th:text="${comment.content}">
+                    </textarea>
+
+                <div class="comment-actions">
+
+                    <button
+                            type="button"
+                            class="edit-comment-btn"
+                            th:if="${comment.author.id == currentUser.id}"
+                            th:attr="data-id=${comment.id}">
+
+                        ✏ Edit
+
+                    </button>
+
+                    <button
+                            type="submit"
+                            class="save-comment-btn"
+                            th:id="'save-comment-' + ${comment.id}"
+                            style="display:none;">
+
+                        ✔ Save
+
+                    </button>
+
+                    <button
+                            type="button"
+                            class="cancel-comment-btn"
+                            th:id="'cancel-comment-' + ${comment.id}"
+                            style="display:none;">
+
+                        ✖ Cancel
+
+                    </button>
+
+                </div>
+
+            </form>
 
             <!-- Reply Button -->
 
@@ -211,9 +257,54 @@
 
                 </div>
 
-                <p
-                        th:text="${reply.content}">
-                </p>
+                <form
+                        th:action="@{/comments/{id}/edit(id=${reply.id})}"
+                        method="post">
+
+                    <textarea
+                            class="edit-comment-textarea"
+                            rows="3"
+                            th:id="'comment-' + ${reply.id}"
+                            name="content"
+                            disabled
+                            th:text="${reply.content}">
+                    </textarea>
+
+                    <div class="comment-actions">
+
+                        <button
+                                type="button"
+                                class="edit-comment-btn"
+                                th:if="${reply.author.id == currentUser.id}"
+                                th:attr="data-id=${reply.id}">
+
+                            ✏ Edit
+
+                        </button>
+
+                        <button
+                                type="submit"
+                                class="save-comment-btn"
+                                th:id="'save-comment-' + ${reply.id}"
+                                style="display:none;">
+
+                            ✔ Save
+
+                        </button>
+
+                        <button
+                                type="button"
+                                class="cancel-comment-btn"
+                                th:id="'cancel-comment-' + ${reply.id}"
+                                style="display:none;">
+
+                            ✖ Cancel
+
+                        </button>
+
+                    </div>
+
+                </form>
 
             </div>
 

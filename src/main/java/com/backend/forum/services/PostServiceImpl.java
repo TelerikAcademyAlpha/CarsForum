@@ -3,9 +3,11 @@ package com.backend.forum.services;
 import com.backend.forum.exceptions.BlockedUserException;
 import com.backend.forum.exceptions.EntityNotFoundException;
 import com.backend.forum.exceptions.InvalidOperationException;
+import com.backend.forum.mapper.PostMapper;
 import com.backend.forum.models.Post;
 import com.backend.forum.models.Tag;
 import com.backend.forum.models.User;
+import com.backend.forum.models.dtos.request.UpdatePostRequest;
 import com.backend.forum.repositories.PostRepository;
 import com.backend.forum.security.AuthenticationFacade;
 import jakarta.transaction.Transactional;
@@ -21,12 +23,14 @@ public class PostServiceImpl implements PostService {
     private final AuthenticationFacade authenticationFacade;
     private final UserService userService;
     private final TagService tagService;
+    private final PostMapper postMapper;
 
-    public PostServiceImpl(PostRepository postRepository, AuthenticationFacade authenticationFacade, UserService userService, TagService tagService) {
+    public PostServiceImpl(PostRepository postRepository, AuthenticationFacade authenticationFacade, UserService userService, TagService tagService, PostMapper postMapper) {
         this.postRepository = postRepository;
         this.authenticationFacade = authenticationFacade;
         this.userService = userService;
         this.tagService = tagService;
+        this.postMapper = postMapper;
     }
 
     @Override
@@ -85,6 +89,25 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getById(Long id) {
         return getExistingPost(id);
+    }
+
+    @Override
+    public Post update(Long id, UpdatePostRequest request) {
+        Post existing = getExistingPost(id);
+
+        String username = authenticationFacade.getCurrentUsername();
+        User currentUser = userService.getByUsername(username);
+
+        if (!existing.getAuthor().getId().equals(currentUser.getId())) {
+            throw new InvalidOperationException(
+                    "You cannot edit another user's post.");
+        }
+
+        postMapper.updateEntity(request, existing);
+
+        postRepository.update(existing);
+
+        return existing;
     }
 
     @Override

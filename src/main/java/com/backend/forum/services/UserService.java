@@ -29,4 +29,8 @@ public interface UserService {
     long getUsersCount();
 
     User updateProfile(UpdateUserRequest request);
+
+    User getCurrentUser();
+
+    void demoteToUser(Long userId);
 }

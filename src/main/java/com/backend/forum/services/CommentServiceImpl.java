@@ -6,6 +6,7 @@ import com.backend.forum.exceptions.InvalidOperationException;
 import com.backend.forum.models.Comment;
 import com.backend.forum.models.Post;
 import com.backend.forum.models.User;
+import com.backend.forum.models.dtos.request.UpdateCommentRequest;
 import com.backend.forum.repositories.CommentRepository;
 import com.backend.forum.repositories.PostRepository;
 import com.backend.forum.security.AuthenticationFacade;
@@ -75,8 +76,15 @@ public class CommentServiceImpl implements CommentService{
 
         Comment comment = getExistingComment(commentId);
 
-        if (!comment.getAuthor().getId().equals(currentUser.getId())) {
-            throw new InvalidOperationException("You cannot delete another user's comment.");
+        boolean isCommentOwner =
+                comment.getAuthor().getId().equals(currentUser.getId());
+
+        boolean isPostOwner =
+                comment.getPost().getAuthor().getId().equals(currentUser.getId());
+
+        if (!isCommentOwner && !isPostOwner) {
+            throw new InvalidOperationException(
+                    "You cannot delete this comment.");
         }
 
         commentRepository.delete(comment);
@@ -122,6 +130,29 @@ public class CommentServiceImpl implements CommentService{
         commentRepository.save(reply);
 
         return reply;
+    }
+
+    @Override
+    @Transactional
+    public Comment update(Long id, UpdateCommentRequest request) {
+
+        User currentUser = getCurrentUser();
+
+        Comment existing = getExistingComment(id);
+
+        if (!existing.getAuthor().getId().equals(currentUser.getId())) {
+            throw new InvalidOperationException(
+                    "You cannot edit another user's comment.");
+        }
+
+        existing.setContent(request.getContent());
+
+        return commentRepository.update(existing);
+    }
+
+    @Override
+    public List<Comment> getAll() {
+        return commentRepository.findAll();
     }
 
     private Comment getExistingComment(Long id) {

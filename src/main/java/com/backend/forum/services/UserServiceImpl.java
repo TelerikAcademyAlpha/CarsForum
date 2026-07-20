@@ -2,6 +2,7 @@ package com.backend.forum.services;
 
 import com.backend.forum.exceptions.EntityDuplicateException;
 import com.backend.forum.exceptions.EntityNotFoundException;
+import com.backend.forum.exceptions.InvalidOperationException;
 import com.backend.forum.mapper.UserMapper;
 import com.backend.forum.models.Role;
 import com.backend.forum.models.User;
@@ -109,7 +110,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void block(Long id) {
+        User currentUser = getCurrentUser();
+
         User user = getExistingUser(id);
+
+        if (currentUser.getId().equals(user.getId())) {
+            throw new InvalidOperationException(
+                    "You cannot block yourself.");
+        }
+
         user.setBlocked(true);
         userRepository.update(user);
     }
@@ -169,6 +178,18 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser() {
         String username = authenticationFacade.getCurrentUsername();
         return getByUsername(username);
+    }
+
+    @Override
+    public void demoteToUser(Long userId) {
+        User currUser = getCurrentUser();
+        User user = getExistingUser(userId);
+        if (currUser.getId().equals(user.getId())) {
+            throw new InvalidOperationException(
+                    "You cannot demote yourself.");
+        }
+        user.setRole(Role.USER);
+        userRepository.update(user);
     }
 
 }
