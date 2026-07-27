@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+                            response.sendRedirect("/");
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
@@ -91,9 +91,22 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
 
                         .defaultSuccessUrl("/", true)
-                        .failureUrl("/?error")
-                        .permitAll()
 
+                        .failureHandler((request, response, exception) -> {
+
+                            if (exception instanceof org.springframework.security.authentication.LockedException) {
+
+                                response.sendRedirect("/?blocked");
+
+                            } else {
+
+                                response.sendRedirect("/?error");
+
+                            }
+
+                        })
+
+                        .permitAll()
                 )
 
 

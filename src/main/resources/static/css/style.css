@@ -112,6 +112,16 @@ body {
     background: #ff5d55;
 }
 
+.auth-buttons{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
 /* =========================
    HERO
 ========================= */

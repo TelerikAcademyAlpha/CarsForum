@@ -36,9 +36,7 @@ public class HomeController {
 
         model.addAttribute("registerRequest", new RegisterRequest());
 
-        model.addAttribute(
-                "createPostRequest",
-                new CreatePostRequest());
+        model.addAttribute("createPostRequest", new CreatePostRequest());
 
         return "index";
     }
